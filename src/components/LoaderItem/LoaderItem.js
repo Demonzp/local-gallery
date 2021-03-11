@@ -1,5 +1,4 @@
 import { Card, Col, Row } from 'react-bootstrap';
-import { toStrStyles } from '../../services/global';
 import styles from './LoaderItem.module.css';
 
 let isCalc = false;
@@ -23,7 +22,9 @@ const LoaderItem = ({ file, updateMeta })=> {
 
   return (
     <Row>
-      <div className={toStrStyles(styles, 'imgCont d-flex justify-content-center align-items-center')}>
+      <div 
+        className={`${styles.imgCont} d-flex justify-content-center align-items-center`}
+      >
         <img
           className={styles.img}
           key={file.key}

@@ -11,20 +11,6 @@ const createId = (length) => {
   return id;
 }
 
-const toStrStyles = (styles, string) => {
-  const arr = string.split(' ');
-  let newStr = '';
-  arr.forEach((str) => {
-    if (styles[str]) {
-      newStr += ' ' + styles[str];
-      return;
-    }
-    newStr += ' ' + str;
-  });
-  return newStr;
-}
-
 export {
-  createId,
-  toStrStyles
+  createId
 }
