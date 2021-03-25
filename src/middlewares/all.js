@@ -5,9 +5,8 @@ const AllRoute = ({ component: Component, ...rest }) => {
 
   return (
     <Route
-      {...rest}
       children={() => (
-        <Component />
+        <Component {...rest}/>
       )}
     />
   );

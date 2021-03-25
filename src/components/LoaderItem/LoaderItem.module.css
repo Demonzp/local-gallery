@@ -1,12 +1,4 @@
-.imgCont{
-  max-width: 220px !important;
-  max-height: 220px !important;
-}
-
-.img{
-  width: 100%;
-}
-
 .cardDisc{
-  min-height: 220px !important;
+  min-height: 256px !important;
+  min-width: 400px !important;
 }

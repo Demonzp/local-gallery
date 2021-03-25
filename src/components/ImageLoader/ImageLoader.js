@@ -1,16 +1,26 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Card, Button, Row } from 'react-bootstrap';
 import useImageLoader from '../../hooks/useImageLoader';
 import LoaderItem from '../LoaderItem/LoaderItem';
 
-export default function ImageLoader() {
+export default function ImageLoader({addToLastImages}) {
   const inputEl = useRef(null);
+  const [isSubmit, setIsSubmit] = useState(false);
 
-  const { files, handlerChange, updateMeta } = useImageLoader();
+  const { files, handlerChange, updateMeta, dellFile, submit } = useImageLoader({addToLastImages});
 
   return (
     <Card>
       <Card.Body>
+        {files.map(file => <LoaderItem
+          submit={submit}
+          isSubmit={isSubmit}
+          file={file}
+          updateMeta={updateMeta}
+          dellFile={dellFile}
+          key={file.key} />
+        )}
+
         <Row className="justify-content-center">
           <Button
             variant="success"
@@ -25,18 +35,12 @@ export default function ImageLoader() {
             onChange={handlerChange}
           />
         </Row>
-        {files.map(file => <LoaderItem
-          file={file}
-          updateMeta={updateMeta}
-          key={file.key} />
-        )}
 
         {files.length > 0 ?
-          <Row className="justify-content-center">
+          <Row className="justify-content-end">
             <Button
-              variant="success"
-              onClick={() => inputEl.current.click()}
-            >Add Image</Button>
+              onClick={() => { setIsSubmit(true) }}
+            >Load Images</Button>
           </Row> :
           null
         }

@@ -1,50 +1,93 @@
 import { useState } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Col, Row, Button } from 'react-bootstrap';
+import Orientation from '../../constants/orientation';
+import CustomForm from '../CustomForm';
+import CustomFormInput from '../CustomFormInput';
+import SmallImg from '../SmallImg';
 import styles from './LoaderItem.module.css';
 
-const LoaderItem = ({ file, updateMeta }) => {
+const getOrientation = (w, h)=>{
+  const diff = w-h;
+  
+  if(diff>0){
+    return Orientation.albom;
+  }else if(diff<0){
+    return Orientation.portrait;
+  }else{
+    return Orientation.square;
+  }
+};
+
+const LoaderItem = ({ file, updateMeta, dellFile, isSubmit, submit }) => {
 
   const [isCalc, setIsCalc] = useState(false);
+  //console.log('isSubmit = ', isSubmit);
 
-  const handlerLoad = (e) => {
-    
-    const img = e.target;
-    const tempImg = new Image();
-    tempImg.src = img.src;
-    URL.revokeObjectURL(img.src);
+  const handlerLoad = ({width, height}) => {
+
+    // const img = e.target;
+    // const tempImg = new Image();
+    // tempImg.src = img.src;
+    // URL.revokeObjectURL(img.src);
 
     if (isCalc) {
       return;
     }
     //console.log('update = ', file.key);
 
-    updateMeta(file.key, { width: tempImg.width, height: tempImg.height });
+    updateMeta(file.key, { 
+      width: width, 
+      height: height, 
+      orientation: getOrientation(width, height) 
+    });
     setIsCalc(true);
+  }
+
+  const preSubmit = (vals)=>{
+    submit(vals);
+    //console.log('vals = ', vals);
   }
 
   return (
     <Row>
-      <div
-        className={`${styles.imgCont} d-flex justify-content-center align-items-center`}
-      >
-        <img
-          className={styles.img}
-          key={file.key}
-          src={URL.createObjectURL(file)}
-          onLoad={handlerLoad}
-          alt="..."
-        />
-      </div>
+      <SmallImg
+        image={file}
+        onLoad = {handlerLoad}
+        styles={{minWidth:'220px', minHeight:'220px'}}
+      />
       <Col>
         <Card className={styles.cardDisc}>
           <Card.Body>
-            {Object.entries(file.meta).map(vals => {
-                //console.log('vals = ', vals);
-                return (
-                  <div key={vals[0]}>{vals[0]}: {vals[1]}</div>
-                );
-              })
-            }
+            <CustomForm
+              vals={file.meta}
+              submit={preSubmit}
+              isSubmit={isSubmit}
+            >
+              {Object.entries(file.meta).map(([key, _]) => {
+                  return (
+                    <CustomFormInput
+                      key={key}
+                      name={key}
+                      label={key}
+                      labelWidth={120}
+                      readOnly={file.fieldMeta[key]}
+                    />
+                  );
+                })
+              }
+            </CustomForm>
+          </Card.Body>
+        </Card>
+      </Col>
+      <Col>
+        <Card className={`text-center`}>
+          <Card.Body>
+            <Button
+              variant="danger"
+              onClick={() => dellFile(file.key)}
+            >
+              Delete
+            </Button>
           </Card.Body>
         </Card>
       </Col>
