@@ -2,7 +2,7 @@ const openRequest = indexedDB.open('store', 1);
 let db;
 let isReady = false;
 
-const sleep = (time)=>{return new Promise((resolve)=> setTimeout(resolve, time))};
+const sleep = (time) => { return new Promise((resolve) => setTimeout(resolve, time)) };
 
 openRequest.onupgradeneeded = async () => {
   db = openRequest.result;
@@ -10,7 +10,7 @@ openRequest.onupgradeneeded = async () => {
     let images = db.createObjectStore('images', { keyPath: 'id', autoIncrement: true });
     images.createIndex('name_idx', 'name');
     images.createIndex('albomId_idx', 'albomId');
-    
+
     await sleep(60);
     isReady = true;
   }
@@ -121,12 +121,12 @@ const countData = () => {
 
 }
 
-const getLastImagesReq = async ()=>{
+const getLastImagesReq = async () => {
   await isConnect();
   const limit = 4;
   let res = [];
 
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     const transactionImages = db.transaction('images', 'readonly');
     const images = transactionImages.objectStore('images');
     const request = images.openCursor(null, "prev");
@@ -161,7 +161,7 @@ const getLimitImagesReq = async (page) => {
   const countPages = Math.ceil(count / limit);
   let tempPage = page > countPages ? countPages : page;
 
-  let start = (tempPage-1) * limit;
+  let start = (tempPage - 1) * limit;
 
   return new Promise((resolve, reject) => {
     //console.log('page = ', page);
@@ -184,12 +184,12 @@ const getLimitImagesReq = async (page) => {
         res.push(cursor.value);
         i++;
         if (i >= limit) {
-          resolve({page:tempPage, data:res, countPages});
+          resolve({ page: tempPage, data: res, countPages });
         } else {
           cursor.continue();
         }
       } else {
-        resolve({page:tempPage, data:res, countPages});
+        resolve({ page: tempPage, data: res, countPages });
       }
     };
 
@@ -222,10 +222,32 @@ const getImagesReq = async () => {
   });
 }
 
+const delImageReq = async (id) => {
+  await isConnect();
+
+  return new Promise((resolve, reject) => {
+
+    const transactionImages = db.transaction('images', 'readwrite');
+    const images = transactionImages.objectStore('images');
+    const request = images.delete(id);
+
+    request.onsuccess = () => { // (4)
+      resolve();
+      //console.log("Книга удалена из хранилища", request.result);
+    };
+
+    request.onerror = () => {
+      console.error(request.error);
+      reject(request.error);
+    };
+  });
+}
+
 export {
   getLastImagesReq,
   getLimitImagesReq,
   getImagesReq,
   addImageReq,
-  updateImageReq
+  updateImageReq,
+  delImageReq
 }

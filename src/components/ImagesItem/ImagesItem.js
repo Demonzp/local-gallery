@@ -8,7 +8,7 @@ import CustomModal from '../CustomModal/CustomModal';
 import { useState } from 'react';
 import { updateImageReq } from '../../services/indexedDb';
 
-const ImagesItem = ({ image, handlerUpdateImage }) => {
+const ImagesItem = ({ image, handlerUpdateImage, delImage }) => {
   const { vals } = useImageItems({ image });
   const { isOpen, handlerClose, handlerOpen } = useCustomModal();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -108,7 +108,7 @@ const ImagesItem = ({ image, handlerUpdateImage }) => {
                   </Button>{` `}
                   <Button
                     variant="danger"
-                    onClick={() => { }}
+                    onClick={()=>{delImage(image.id)}}
                   >
                     Delete
                   </Button>
