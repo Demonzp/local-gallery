@@ -31,7 +31,7 @@ export default function ImageLoader({addToLastImages}) {
             ref={inputEl}
             type="file"
             accept="image/jpeg,image/png,image/gif,image/bmp"
-            multiple
+            //multiple
             onChange={handlerChange}
           />
         </Row>

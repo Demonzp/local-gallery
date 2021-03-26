@@ -29,6 +29,20 @@ export default function Images() {
     setPage(p);
   }
 
+  const handlerUpdateImage = (image)=>{
+    const idx = images.findIndex((img)=>img.id===image.id);
+
+    const newImages = [
+      ...images.slice(0, idx),
+      image,
+      ...images.slice(idx+1)
+    ];
+
+    console.log('newImages = ', newImages);
+
+    setImages(newImages);
+  }
+
   return (
     <div
       style={{ marginTop: '8px' }}
@@ -47,7 +61,7 @@ export default function Images() {
               style={{ marginRight: 'auto', marginTop: '8px' }}
               className="justify-content-center"
             >
-              <ImagesItem image={image} />
+              <ImagesItem image={image} handlerUpdateImage={handlerUpdateImage}/>
             </Row>
           );
         })

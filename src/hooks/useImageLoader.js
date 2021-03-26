@@ -17,6 +17,7 @@ export default function useImageLoader({addToLastImages}) {
     })
       .then((res)=>{
         addToLastImages(res);
+        setFiles([]);
       })
       .catch((error)=>{
         console.log('error = ', error);
@@ -83,7 +84,8 @@ export default function useImageLoader({addToLastImages}) {
       return file;
     });
 
-    setFiles(prev => [...prev, ...newFiles]);
+    //setFiles(prev => [...prev, ...newFiles]);
+    setFiles(newFiles);
   };
 
   return {

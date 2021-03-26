@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 
 // Cоздаём кастомный хук UseValidationForm.
-const UseValidationForm = (callback, callbackError, initialState = {}, Validation) => {
-
+const UseValidationForm = (callback, callbackError, initialState = {}, Validation, force, setForce) => {
+  //console.log('initialState = ', initialState);
   const [values, setValues] = useState(initialState);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // console.log('values = ', values);
+  useEffect(()=>{
+    if(!force){
+      return;
+    }
+    //console.log('initialState = ', initialState);
+    setValues(initialState);
+    setForce(false);
+  }, [force]);
   // Создаём функцию изменения.
   const handleChange = (event) => {
     const { name, value } = event.target;

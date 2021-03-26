@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap';
 
-const CustomFormInput = ({name, type="text", label, helpText, value, labelWidth, handleChange, ...rest}) => {
+const CustomFormInput = ({name, type="text", label, helpText, value, as, labelWidth, handleChange, ...rest}) => {
   //console.log('value = ', value);
   return (
     <div className="d-flex justify-content-center align-items-center">
@@ -10,6 +10,7 @@ const CustomFormInput = ({name, type="text", label, helpText, value, labelWidth,
         name={name}
         value={value}
         type={type}
+        as={as}
         className="mx-sm-3"
         onChange={handleChange}
       />

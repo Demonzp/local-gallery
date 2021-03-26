@@ -6,6 +6,12 @@ const useSimpleForm = ({ handlerError = ()=>{}, submit, vals, validation, childr
   const [btns, setBtns] = useState([]);
   const [navs, setNavs] = useState([]);
   const [isInit, setIsInit] = useState(false);
+
+  const [force, setForce] = useState(false);
+
+  useEffect(()=>{
+    setForce(true);
+  }, [vals]);
   //console.log('vals = ', vals);
 
   const preSubmit = (e) => {
@@ -20,6 +26,8 @@ const useSimpleForm = ({ handlerError = ()=>{}, submit, vals, validation, childr
     handlerError,
     vals,
     validation,
+    force,
+    setForce
   );
 
   useEffect(() => {

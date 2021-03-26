@@ -1,8 +1,8 @@
 import useSimpleForm from '../../hooks/useSimpleForm';
 import { Form } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
 
 const CustomForm = ({ submit, vals, errors = {}, validation = () => { return {} }, isLoading, isSubmit, children, handlerError = () => { } }) => {
-
   const {fields, btns, navs, handleSubmit} = useSimpleForm({submit, vals, validation, children, isLoading, isSubmit});
 
   return (

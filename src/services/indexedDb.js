@@ -32,7 +32,20 @@ openRequest.onsuccess = () => {
   };
 };
 
-const getImageReq = (id) => {
+const isConnect = async () => {
+  return new Promise((resolve) => {
+    const timer = setInterval(() => {
+      if (db && isReady) {
+        clearInterval(timer);
+        resolve();
+      }
+    }, 30);
+  })
+}
+
+const getImageReq = async (id) => {
+  await isConnect();
+
   return new Promise((resolve, reject) => {
     const transactionImages = db.transaction('images', 'readwrite');
     const images = transactionImages.objectStore('images');
@@ -50,7 +63,31 @@ const getImageReq = (id) => {
   });
 }
 
-const addImageReq = (data) => {
+const updateImageReq = async (data) => {
+  await isConnect();
+
+  return new Promise((resolve, reject) => {
+    const transactionImages = db.transaction('images', 'readwrite');
+    const images = transactionImages.objectStore('images');
+    const request = images.put(data);
+
+    request.onsuccess = async () => { // (4)
+      const image = await getImageReq(request.result);
+      resolve(image);
+      //resolve(request.result);
+      //console.log("Книга добавлена в хранилище", request.result);
+    };
+
+    request.onerror = () => {
+      reject(request.error);
+      //console.log("Ошибка", request.error);
+    };
+  });
+}
+
+const addImageReq = async (data) => {
+
+  await isConnect();
 
   return new Promise((resolve, reject) => {
     const transactionImages = db.transaction('images', 'readwrite');
@@ -70,17 +107,6 @@ const addImageReq = (data) => {
     };
   });
 
-}
-
-const isConnect = async () => {
-  return new Promise((resolve) => {
-    const timer = setInterval(() => {
-      if (db && isReady) {
-        clearInterval(timer);
-        resolve();
-      }
-    }, 30);
-  })
 }
 
 const countData = () => {
@@ -200,5 +226,6 @@ export {
   getLastImagesReq,
   getLimitImagesReq,
   getImagesReq,
-  addImageReq
+  addImageReq,
+  updateImageReq
 }
