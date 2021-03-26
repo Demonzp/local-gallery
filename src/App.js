@@ -28,24 +28,32 @@ function App() {
       .then((res)=>{
         setLastImages(res.reverse());
       });
-    // getLimitImagesReq(page)
-    //   .then((res) => {
-    //     console.log('res = ', res);
-    //     setFiles(res.data);
-    //     setCountPages(res.countPages);
-    //   })
-    //   .catch((error) => {
-    //     console.log('error = ', error);
-    //   });
-    // getImagesReq()
-    //   .then((res)=>{
-    //     console.log('res = ', res);
-    //     setFiles(res);
-    //   })
-    //   .catch((error)=>{
-    //     console.log('error = ', error);
-    //   });
   }, []);
+
+  const updateLastImages = (image)=>{
+    if(!image){
+      getLastImagesReq()
+        .then((res)=>{
+          setLastImages(res.reverse());
+        });
+      return;
+    }
+    
+    const idx = lastImages.findIndex(({id})=>id===image.id);
+
+    if(idx<0){
+      return;
+    }
+
+    setLastImages((prev)=>{
+      return[
+        ...prev.slice(0, idx),
+        image,
+        ...prev.slice(idx+1)
+      ];
+    });
+
+  }
 
   return (
     <div className="App">
@@ -59,6 +67,7 @@ function App() {
                   <AllRoute
                     addToLastImages={addToLastImages}
                     lastImages={lastImages}
+                    updateLastImages={updateLastImages}
                     {...route}
                     key={i}
                   />

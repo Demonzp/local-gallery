@@ -4,7 +4,7 @@ import { delImageReq, getLimitImagesReq } from '../services/indexedDb';
 import ImagesItem from '../components/ImagesItem';
 import SimplePaginator from '../components/SimplePaginator';
 
-export default function Images() {
+export default function Images({updateLastImages}) {
   const [images, setImages] = useState([]);
   const [page, setPage] = useState(0);
   const [countPages, setCountPages] = useState(1);
@@ -45,6 +45,7 @@ export default function Images() {
     console.log('newImages = ', newImages);
 
     setImages(newImages);
+    updateLastImages(image);
   }
 
   const delImage = (id)=>{
@@ -52,6 +53,7 @@ export default function Images() {
     delImageReq(id)
       .then(()=>{
         getImages();
+        updateLastImages();
       });
   };
 
